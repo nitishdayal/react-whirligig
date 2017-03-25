@@ -13,17 +13,20 @@ module.exports = {
       experimentalObjectRestSpread: true
     }
   },
+  plugins: ['babel'],
   rules: {
-    quotes: [ 2, 'single', { allowTemplateLiterals: true } ],
+    quotes: [2, 'single', { allowTemplateLiterals: true }],
     'no-magic-numbers': 'off',
     'func-style': 'off',
     'arrow-parens': 'off',
     'no-use-before-define': 'off',
+    'no-invalid-this': 'off',
     'react/jsx-filename-extension': 'off',
     'react/require-extension': 'off',
     'react/no-multi-comp': 'warn',
     'react/prop-types': 'warn',
     'react/sort-comp': 'warn',
-    'react/sort-prop-types': 'warn'
+    'react/sort-prop-types': 'warn',
+    'babel/no-invalid-this': 1
   }
 };

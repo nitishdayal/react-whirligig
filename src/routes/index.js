@@ -16,10 +16,6 @@ const Routes = () => (
         path="/"
         component={asyncRoute(() => System.import('../components/home'))}
       />
-      <Route
-        path="/page2"
-        component={asyncRoute(() => System.import('../components/page2'))}
-      />
     </Root>
   </Router>
 );
