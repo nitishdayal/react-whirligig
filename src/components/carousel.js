@@ -13,11 +13,8 @@ class Carousel extends Component {
   componentWillReceiveProps(nextProps) {
     let { idx } = nextProps;
 
-    if (idx < 0) {
-      idx = nextProps.children.length + idx;
-    } else {
-      idx = formatIdx(idx, nextProps.children.length);
-    }
+    idx = formatIdx(idx, nextProps.children.length);
+
 
     this.setState((prev) => {
       return { idx: prev.idx !== idx ? idx : prev.idx };
@@ -42,7 +39,7 @@ class Carousel extends Component {
   }
 }
 
-const formatIdx = (idx, arrLen) => Math.abs(idx % arrLen);
+const formatIdx = (idx, arrLen) => Math.abs((idx % arrLen + arrLen) % arrLen);
 
 Carousel.propTypes = {
   children: PropTypes.node,
