@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes as T } from 'react';
 import Helmet from 'react-helmet';
 
 import Carousel from './carousel';
@@ -12,15 +12,11 @@ class Home extends React.Component {
   }
 
   onHandleRight = () => {
-    this.setState((prev) => {
-      return { idx: prev.idx + 1 };
-    });
+    this.setState((prev) => ({ idx: prev.idx + 1 }));
   }
 
   onHandleLeft = () => {
-    this.setState((prev) => {
-      return { idx: prev.idx - 1 };
-    });
+    this.setState((prev) => ({ idx: prev.idx - 1 }));
   }
 
   render() {
@@ -31,27 +27,25 @@ class Home extends React.Component {
     return (
       <Container>
         <Helmet title="Home" />
-
         <Carousel
           idx={idx}
           style={style}
           handleRight={this.onHandleRight}
           handleLeft={this.onHandleLeft}
         >
-          <Mom />
-          <Dad />
-          <Dog />
+          <Name name="Mom" />
+          <Name name="Dad" />
+          <Name name="Dog" />
         </Carousel>
-
       </Container >
     );
   }
 }
 
-const Mom = () => <span>Hello mom!</span>;
+const Name = ({ name }) => <span>Hello {name}!</span>;
 
-const Dad = () => <span>Hi dad!</span>;
-
-const Dog = () => <span>Hi dog!</span>;
+Name.propTypes = {
+  name: T.string
+};
 
 export default Home;
