@@ -16,41 +16,67 @@ class Carousel extends Component {
   constructor(props) {
     super(props);
 
-    const { children, idx } = props;
-    const components =
-      children.map((el, i, arr) => new CarouselNode(el, arr[i - 1], arr[i + 1]));
+    const { children } = props;
 
     this.state = {
-      idx,
-      components
+      head: null,
+      tail: null,
+      children
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { children, idx } = nextProps;
-    const { components } = this.state;
+  componentDidMount() {
 
-    const innerIdx = formatIdx(idx, Math.ceil((components.length + children.length) / 2));
+    const { children } = this.state;
+    children.forEach(el => { this.addNode(el); });
 
-    this.setState((prev) => ({ prev, idx: innerIdx }));
+  }
+  addNode = (el) => {
+    this.forceUpdate(() => console.log('Forced update'));
+    console.log(`Working with el: `, el);
+    const newNode = new CarouselNode(el);
+    let head;
+    let tail;
+
+    if (this.state.head) {
+      console.log(`State head found! ${this.state.head}`);
+      const { tail: curr } = this.state;
+      tail = newNode;
+      curr.next = tail;
+      tail.prev = curr;
+    } else {
+      console.log('No state head');
+      head = tail = newNode;
+      head.next = tail;
+      tail.prev = head;
+    }
+    this.setState(prev => ({ ...prev, head, tail }), () => console.log('set state done!'));
   }
 
-  render() {
-    const { idx, components } = this.state;
-    const { style, handleLeft, handleRight } = this.props;
+  handleLeft = () => {
+    console.log('handling left!', this.state);
+    this.setState(({ head, rest }) => ({ ...rest, head: head.prev }));
+  }
 
-    const DisplayElem = components[idx];
+  handleRight = () => {
+    console.log('handling right!', this.state);
+    this.setState(({ head, rest }) => ({ ...rest, head: head.next }));
+  }
+
+
+  render() {
+    const { head: displayElem } = this.state;
+    const { style } = this.props;
 
     return (
       <div>
         <div style={style}>
-          <button onClick={handleLeft}>{'<'}</button>
+          <button onClick={this.handleLeft}>{'<'}</button>
           <span style={{ alignSelf: 'center' }}>
-            {DisplayElem.el}
+            {displayElem && displayElem.el}
           </span>
-          <button onClick={handleRight}>{'>'}</button>
+          <button onClick={this.handleRight}>{'>'}</button>
         </div>
-        <p>Current IDX: {idx}</p>
       </div>
     );
   }
@@ -66,7 +92,7 @@ const addComponent = (carousel, component) => {
   );
 };
 
-const formatIdx = (idx, arrLen) => (idx % arrLen + arrLen) % arrLen;
+// const formatIdx = (idx, arrLen) => (idx % arrLen + arrLen) % arrLen;
 
 Carousel.propTypes = {
   children: PropTypes.any,
