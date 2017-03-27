@@ -1,14 +1,14 @@
 import React, { PropTypes as T } from 'react';
 import Helmet from 'react-helmet';
 
-import Carousel from './carousel';
+import { Carousel, addComponent } from './carousel';
 import Container from './container';
 
 class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { idx: 0 };
+    this.state = { idx: 0, key: 0 };
   }
 
   onHandleRight = () => {
@@ -19,10 +19,20 @@ class Home extends React.Component {
     this.setState((prev) => ({ idx: prev.idx - 1 }));
   }
 
-  render() {
+  handleClick = () => {
+    addComponent(this.carousel, <Name name={`Butter ${this.state.key}`} key={this.state.key} />);
+    // this.setState((prev) => ({ key: prev.key++, ...prev }));
+  }
 
+  render() {
     const { idx } = this.state;
     const style = { display: 'flex', justifyContent: 'space-between', height: '500px' };
+
+    const elems = [
+      <Name name="Mom" key="Mom" />,
+      <Name name="Dad" key="Dad" />,
+      <Name name="Dog" key="Dog" />
+    ];
 
     return (
       <Container>
@@ -32,11 +42,11 @@ class Home extends React.Component {
           style={style}
           handleRight={this.onHandleRight}
           handleLeft={this.onHandleLeft}
+          ref={(car) => { this.carousel = car; }}
         >
-          <Name name="Mom" />
-          <Name name="Dad" />
-          <Name name="Dog" />
+          {elems}
         </Carousel>
+        <button onClick={this.handleClick}>Add Component</button>
       </Container >
     );
   }

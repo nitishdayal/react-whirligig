@@ -1,22 +1,38 @@
 import React, { Component, PropTypes } from 'react';
 
 
+class CarouselNode {
+
+  constructor(el, prev = null, next = null) {
+    this.el = el;
+    this.prev = prev;
+    this.next = next;
+  }
+
+}
+
 class Carousel extends Component {
 
   constructor(props) {
     super(props);
 
+    const { children, idx } = props;
+    const components =
+      children.map((el, i, arr) => new CarouselNode(el, arr[i - 1], arr[i + 1]));
+
     this.state = {
-      idx: 0 || props.idx,
-      components: props.children
+      idx,
+      components
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    let { idx } = nextProps;
-    idx = formatIdx(idx, nextProps.children.length);
+    const { children, idx } = nextProps;
+    const { components } = this.state;
 
-    this.setState({ idx });
+    const innerIdx = formatIdx(idx, Math.ceil((components.length + children.length) / 2));
+
+    this.setState((prev) => ({ prev, idx: innerIdx }));
   }
 
   render() {
@@ -30,7 +46,7 @@ class Carousel extends Component {
         <div style={style}>
           <button onClick={handleLeft}>{'<'}</button>
           <span style={{ alignSelf: 'center' }}>
-            {DisplayElem}
+            {DisplayElem.el}
           </span>
           <button onClick={handleRight}>{'>'}</button>
         </div>
@@ -40,6 +56,15 @@ class Carousel extends Component {
   }
 
 }
+
+const addComponent = (carousel, component) => {
+
+  const newPony = new CarouselNode(component);
+  console.log(newPony);
+  carousel.setState(
+    ({ components, ...rest }) => ({ components: [...components, newPony], idx: rest.idx })
+  );
+};
 
 const formatIdx = (idx, arrLen) => (idx % arrLen + arrLen) % arrLen;
 
@@ -51,4 +76,4 @@ Carousel.propTypes = {
   style: PropTypes.object
 };
 
-export default Carousel;
+export { Carousel, addComponent };
