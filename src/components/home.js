@@ -9,19 +9,21 @@ class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { idx: 0, key: 0 };
+    this.state = { key: 0 };
   }
 
-  handleClick = () =>
+  handleClick = () => (
     addComponent(
       this.carousel,
       <Name
         name={`Butter ${this.state.key}`}
-        key={this.carousel.children.length}
-      />);
+        key={this.state.key}
+      />,
+      this.setState(({ key, ...rest }) => ({ ...rest, key: ++key }))
+    )
+  );
 
   render() {
-    const { idx } = this.state;
 
     const style = {
       display: 'flex',
@@ -39,7 +41,6 @@ class Home extends React.Component {
       <Container>
         <Helmet title="Home" />
         <Carousel
-          idx={idx}
           style={style}
           ref={car => { this.carousel = car; }}
         >

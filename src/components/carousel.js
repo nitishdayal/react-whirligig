@@ -1,17 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes as T } from 'react';
 
 
-/****************************************************************************
-
-  One ESLint no-console warning is enough, don't you think?
-
-****************************************************************************/
-
-const trace = console.log; // eslint-disable-line
-
-/**
- * Node element for Carousel component.
- */
+/* eslint-disable no-console */
 class CarouselNode {
 
   /**
@@ -35,8 +25,15 @@ class CarouselNode {
 
 class Carousel extends Component {
 
+  static propTypes = {
+    children: T.arrayOf(T.node),
+    style: T.object
+  };
+
   constructor(props) {
+    console.groupCollapsed('constructor');
     super(props);
+
     const { children } = props;
 
     this.state = {
@@ -45,45 +42,94 @@ class Carousel extends Component {
       curr: null,
       children
     };
+    console.groupEnd();
   }
 
   componentWillMount() {
+    console.groupCollapsed('componentWillMount');
     const { head, tail, children } = this.state;
 
     const newState = this.addNode(children, head, tail),
       { head: curr } = newState;
 
-    this.setState(
-      prev => ({ ...prev, ...newState, curr }),
-      () => { trace('set state done!'); }
-    );
+    this.setState(prev => ({ ...prev, ...newState, curr }));
+    console.groupEnd();
+  }
+
+  componentDidMount() {
+    console.groupCollapsed('componentDidMount');
+    console.log('#Mounted');
+    console.groupEnd();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.groupCollapsed('componentWillReceiveProps');
+    console.log(`Receiving props!`, nextProps);
+
+    console.log(`\nCurrent State: `, this.state);
+    console.groupEnd();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.groupCollapsed('shouldComponentUpdate');
+    console.log(nextProps);
+    console.log(nextState);
+    console.groupEnd();
+    return true;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.groupCollapsed('componentWillUpdate');
+    console.log(nextProps);
+    console.log(nextState);
+    console.groupEnd();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.groupCollapsed('componentDidUpdate');
+    console.log(prevProps);
+    console.log(prevState);
+    console.log(this.state);
+    console.assert(prevState !== this.state, 'Previous and current states do not match');
+    console.groupEnd();
+  }
+
+  componentWillUnmount() {
+    console.group('componentWillUnmount');
+    console.groupEnd();
   }
 
   addNode = (els, h, t) => {
+    console.groupCollapsed('In addNode');
+
     const callOnEach = (el) => {
       const newNode = new CarouselNode(el);
+
       if (h) {
         [t.next, newNode.prev, t] = [newNode, t, newNode];
       } else {
         h = t = newNode;
-        newNode.next = t;
-        t.prev = newNode;
+        [h.next, t.prev] = [t, h];
+        h.prev = t.next = null;
       }
     };
 
     els.forEach(el => { callOnEach(el); });
+    console.groupEnd();
 
     return { head: h, tail: t };
   }
 
   handleLeft = () => {
-    trace('handling left!', this.state);
-    this.setState(({ tail, curr, ...rest }) => ({ ...rest, tail, curr: curr.prev || tail }));
+    console.log('handling left!', this.state);
+    this.setState(({ tail, curr, ...rest }) =>
+      ({ ...rest, tail, curr: curr.prev || tail }));
   }
 
   handleRight = () => {
-    trace('handling right!', this.state);
-    this.setState(({ head, curr, ...rest }) => ({ ...rest, head, curr: curr.next || head }));
+    console.log('handling right!', this.state);
+    this.setState(({ head, curr, ...rest }) =>
+      ({ ...rest, head, curr: curr.next || head }));
   }
 
 
@@ -106,17 +152,12 @@ class Carousel extends Component {
 
 }
 
-const addComponent = (carousel, component) => {
+const addComponent = (carousel, component, cb) => {
   const newPony = new CarouselNode(component);
-  carousel.setState(({ cmp, rest }) => ({ ...rest, cmp: [...cmp, newPony] }));
-};
-
-Carousel.propTypes = {
-  children: PropTypes.any,
-  handleLeft: PropTypes.func,
-  handleRight: PropTypes.func,
-  idx: PropTypes.number,
-  style: PropTypes.object
+  carousel.setState(({ children, ...rest }) => ({ ...rest, children: [...children, newPony] }));
+  if (cb) {
+    cb();
+  }
 };
 
 export { Carousel, addComponent };
