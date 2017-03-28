@@ -5,7 +5,7 @@
 
 _Because react-carousel is taken_
 
-A carousel component for React, implemented using a doubly linked list to manage carousel components.
+A carousel container for React, implemented using a doubly linked list to manage carousel components.
 
 **CURRENTLY UNDER DEVELOPMENT - PULL REQUESTS WELCOME!**
 
