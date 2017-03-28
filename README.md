@@ -1,4 +1,4 @@
-# React Whirligig
+# 🎠🎠🎠 React Whirligig 🎠🎠🎠
 
 > Nitish Dayal, Software & Applications Developer - [Contact](mailto:contact@nitishdayal.me)  
 > Last Commit Date: March 28, 2017
