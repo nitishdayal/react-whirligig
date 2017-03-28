@@ -15,7 +15,8 @@ module.exports = {
   },
   plugins: ['babel'],
   rules: {
-    quotes: [2, 'single', { allowTemplateLiterals: true }],
+    'quotes': [2, 'single', { allowTemplateLiterals: true }],
+    'one-var': 'off',
     'no-magic-numbers': 'off',
     'func-style': 'off',
     'arrow-parens': 'off',

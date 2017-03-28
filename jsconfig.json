@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "newLine": "LF",
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "typeAcquisition": {
+    "enable": true
+  }
+}
