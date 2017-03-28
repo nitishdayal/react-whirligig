@@ -38,19 +38,19 @@ Minimum Requirements:
     -   [ ] Receive optional scroll time (bool or ms)
 -   External API - Add Component (DLL method):
     -   [-] Receive component (React element) 
-        _(New Carousel node element created from provided component & added 
-          to Carousel state, still need to attach node to DLL/Carousel as new tail)_
+          _(New Carousel node element created from provided component & added 
+              to Carousel state, still need to attach node to DLL/Carousel as new tail)_
     -   [ ] Receive optional location
-        -   (number | 'first' | 'last' | 'middle' | 
-                    \- 'after first' | 'before middle' | 'after middle' | 'before last' |
-                  \- [ number,'before'|'after' ])
+        -   (number | 'first' | 'last' | 'middle' |  
+                      'after first' | 'before middle' | 'after middle' | 'before last' |  
+                      [ number,'before'|'after' ])
         -   Defaults to 'last' (new component is tail of DLL)
 -   External API - Remove Component (DLL method):
     -   [ ] Receive location (same parameter options as add component location)
 -   External API - Show Component (DLL method):
     -   [ ] Receive location (same parameter options as add component location)
         -   OR
-        -   Receive reference to element to be shown (???)
+    -   [ ] Receive reference to element to be shown (???)
 -   External API - Get Component (DLL Method):
     -   [ ] Same parameters as show component
 
