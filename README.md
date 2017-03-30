@@ -36,21 +36,21 @@ Minimum Requirements:
     -   [x] ~Receive optional style as props (React styling thing)~
     -   [ ] Receive optional left/right button components as props (components)
     -   [ ] Receive optional scroll time (bool or ms)
--   External API - Add Component (DLL method):
+-   **External API - Add Component (DLL method):**
     -   [x] ~Receive component (React element)~
     -   [ ] Receive optional location
         -   (number | 'first' | 'last' | 'middle' |  
             'after first' | 'before middle' | 'after middle' | 'before last' |  
              [ number,'before'|'after' ])
         -   Defaults to 'last' (new component is tail of DLL)
--   External API - Remove Component (DLL method):
+-   **External API - Remove Component (DLL method):**
     -   [x] ~Remove current tail of Carousel DLL~
     -   [ ] Receive location (same parameter options as add component location)
--   External API - Show Component (DLL method):
+-   **External API - Show Component (DLL method):**
     -   [ ] Receive location (same parameter options as add component location)
         -   OR
     -   [ ] Receive reference to element to be shown (???)
--   External API - Get Component (DLL Method):
+-   **External API - Get Component (DLL Method):**
     -   [ ] Same parameters as show component
 
 Idk probably more to come feel free to submit PRs. ❤️❤️❤️
