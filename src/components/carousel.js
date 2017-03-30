@@ -149,9 +149,15 @@ class Carousel extends Component {
 /**
  * Append a component to the Carousel.
  *
- * @param {Carousel} carousel - Carousel instance
- * @param {JSX.Element} cmp - New component to be appended to Carousel
- * @param {function} cb - Optional callback function
+ * @param {Carousel} carousel
+ * Carousel instance
+ *
+ * @param {JSX.Element} cmp
+ * New component to be appended to Carousel
+ *
+ * @param {function} cb
+ * Optional callback function
+ *
  * @return {void}
  */
 const addComponent = (carousel, cmp, cb = () => null) => {
@@ -165,7 +171,7 @@ const addComponent = (carousel, cmp, cb = () => null) => {
 
   const newHeadTail = Carousel.appendNode([cmp], head, tail);
 
-  carousel.setState(prev => ({ ...prev, ...newHeadTail, nodes: [...nodes, cmp], curr }), cb());
+  carousel.setState(prev => ({ ...prev, ...newHeadTail, nodes: [...nodes, cmp], curr }), cb);
 };
 
 const removeComponent = (carousel, cb = () => null) => (
