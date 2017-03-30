@@ -1,163 +1,187 @@
 import React, { Component, PropTypes as T } from 'react';
 
-
-/* eslint-disable no-console */
+/* eslint-disable no-console, max-statements, no-nested-ternary */
 class CarouselNode {
+  next;
+  prev;
+  el;
 
-  /**
-   * Creates an instance of CarouselNode.
-   * @param {component} el
-   * React component to be used as CarouselNode instance's value
-   * @param {CarouselNode|null} [prev=null]
-   * CarouselNode instance which comes before _this_ instance in the Carousel chain
-   * @param {CarouselNode|null} [next=null]
-   * CarouselNode instance which comes after _this_ instance in the Carousel chain
-   *
-   * @memberOf CarouselNode
-   */
-  constructor(el, prev = null, next = null) {
-    this.el = el;
-    this.prev = prev;
-    this.next = next;
+  constructor() {
+    this.next = null;
+    this.prev = null;
+    this.el = null;
   }
-
 }
 
+/**
+ * Carousel Container Component: Provide initial carousel components as
+ * children, with the first component to be displayed provided as the first
+ * child.
+ *
+ * @class Carousel
+ * @extends {Component}
+ *
+ * @property {Object} state - Carousel component's state
+ */
 class Carousel extends Component {
-
   static propTypes = {
     children: T.arrayOf(T.node),
     style: T.object
   };
 
-  constructor(props) {
-    console.groupCollapsed('constructor');
-    super(props);
+  /**
+   * Append node to DLL as new tail
+   * @memberOf Carousel
+   *
+   * @static
+   * @param {...JSX.Element} els - Carousel component's elements
+   * @param {CarouselNode} h - Current 'Head' node of Carousel
+   * @param {CarouselNode} t - Current 'Tail' node of Carousel
+   *
+   * @return {object} New 'head' and 'tail' node of Carousel
+   */
+  static appendNode = (els, h, t) => {
 
-    const { children } = props;
+    els.forEach(el => {
+      const newNode = new CarouselNode();
+      newNode.el = el;
+
+      if (h) {
+        let curr = h;
+        while (curr && curr.next) {
+          curr = curr.next;
+        }
+        curr.next = newNode;
+        newNode.prev = curr;
+        t = newNode;
+      } else {
+        h = t = newNode;
+      }
+    });
+
+    return { head: h, tail: t };
+  };
+
+  constructor(props) {
+    super(props);
+    const { children: nodes } = props;
 
     this.state = {
       head: null,
       tail: null,
       curr: null,
-      children
+      nodes
     };
-    console.groupEnd();
   }
 
+  /**
+   * Called before the component is mounted to the DOM
+   *
+   * @return {void}
+   * @memberOf Carousel
+   */
   componentWillMount() {
-    console.groupCollapsed('componentWillMount');
-    const { head, tail, children } = this.state;
+    console.log('hello');
+    const { head, tail, nodes } = this.state;
 
-    const newState = this.addNode(children, head, tail),
-      { head: curr } = newState;
+    const newState = Carousel.appendNode([...nodes], head, tail), { head: curr } = newState;
 
     this.setState(prev => ({ ...prev, ...newState, curr }));
-    console.groupEnd();
   }
 
-  componentDidMount() {
-    console.groupCollapsed('componentDidMount');
-    console.log('#Mounted');
-    console.groupEnd();
-  }
+  /*  Component Lifecycle Methods
 
-  componentWillReceiveProps(nextProps) {
-    console.groupCollapsed('componentWillReceiveProps');
-    console.log(`Receiving props!`, nextProps);
-
-    console.log(`\nCurrent State: `, this.state);
-    console.groupEnd();
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.groupCollapsed('shouldComponentUpdate');
-    console.log(nextProps);
-    console.log(nextState);
-    console.groupEnd();
-    return true;
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    console.groupCollapsed('componentWillUpdate');
-    console.log(nextProps);
-    console.log(nextState);
-    console.groupEnd();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.groupCollapsed('componentDidUpdate');
-    console.log(prevProps);
-    console.log(prevState);
-    console.log(this.state);
-    console.assert(prevState !== this.state, 'Previous and current states do not match');
-    console.groupEnd();
-  }
-
-  componentWillUnmount() {
-    console.group('componentWillUnmount');
-    console.groupEnd();
-  }
-
-  addNode = (els, h, t) => {
-    console.groupCollapsed('In addNode');
-
-    const callOnEach = (el) => {
-      const newNode = new CarouselNode(el);
-
-      if (h) {
-        [t.next, newNode.prev, t] = [newNode, t, newNode];
-      } else {
-        h = t = newNode;
-        [h.next, t.prev] = [t, h];
-        h.prev = t.next = null;
+      componentDidMount() {
       }
-    };
 
-    els.forEach(el => { callOnEach(el); });
-    console.groupEnd();
+      componentWillReceiveProps(nextProps) {
 
-    return { head: h, tail: t };
+      }
+  */
+
+  shouldComponentUpdate(_, { curr: el, nodes: newNodes }) {
+    const { curr: nEl, nodes } = this.state;
+
+    console.log(el !== nEl || nodes.length !== newNodes.length);
+
+    return (
+      el !== nEl ||
+      nodes.length !== newNodes.length
+    );
   }
+
+  /*
+      componentWillUpdate(nextProps, nextState) {
+      }
+
+      componentDidUpdate(prevProps, prevState) {
+      }
+
+      componentWillUnmount() {
+      }
+
+  */
 
   handleLeft = () => {
-    console.log('handling left!', this.state);
-    this.setState(({ tail, curr, ...rest }) =>
-      ({ ...rest, tail, curr: curr.prev || tail }));
-  }
+    this.setState(({ tail, curr, ...rest }) => ({ ...rest, tail, curr: curr.prev || tail }));
+  };
 
   handleRight = () => {
-    console.log('handling right!', this.state);
-    this.setState(({ head, curr, ...rest }) =>
-      ({ ...rest, head, curr: curr.next || head }));
-  }
-
+    this.setState(({ head, curr, ...rest }) => ({ ...rest, head, curr: curr.next || head }));
+  };
 
   render() {
     const { curr: displayElem } = this.state;
     const { style } = this.props;
 
     return (
-      <div>
-        <div style={style}>
-          <button onClick={this.handleLeft}>{'<'}</button>
-          <span style={{ alignSelf: 'center' }}>
-            {displayElem && displayElem.el}
-          </span>
-          <button onClick={this.handleRight}>{'>'}</button>
-        </div>
+      <div style={style}>
+        <button onClick={this.handleLeft}>{'<'}</button>
+        <span style={{ alignSelf: 'center' }}>
+          {displayElem && displayElem.el}
+        </span>
+        <button onClick={this.handleRight}>{'>'}</button>
       </div>
     );
   }
-
 }
 
-const addComponent = (carousel, component, cb) => {
-  const newPony = new CarouselNode(component);
-  carousel.setState(({ children, ...rest }) => ({ ...rest, children: [...children, newPony] }));
-  if (cb) {
-    cb();
-  }
+/**
+ * Append a component to the Carousel.
+ *
+ * @param {Carousel} carousel - Carousel instance
+ * @param {JSX.Element} cmp - New component to be appended to Carousel
+ * @param {function} cb - Optional callback function
+ * @return {void}
+ */
+const addComponent = (carousel, cmp, cb = () => null) => {
+  const { nodes, head, tail } = carousel.state;
+  let { curr } = carousel.state;
+
+  curr =
+    curr === head ? head :
+      curr === tail ? tail :
+        curr;
+
+  const newHeadTail = Carousel.appendNode([cmp], head, tail);
+
+  carousel.setState(prev => ({ ...prev, ...newHeadTail, nodes: [...nodes, cmp], curr }), cb());
 };
 
-export { Carousel, addComponent };
+const removeComponent = (carousel, cb = () => null) => (
+  carousel.setState(({ tail, curr, ...rest }) => {
+    const { prev: newTail } = tail;
+
+    if (newTail) {
+      newTail.next = null;
+
+      if (curr === tail) { curr = newTail; }
+
+      tail = newTail;
+    }
+
+    return { ...rest, tail, curr };
+  }) && cb());
+
+
+export { Carousel, addComponent, removeComponent };

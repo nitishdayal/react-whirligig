@@ -1,52 +1,43 @@
 import React, { PropTypes as T } from 'react';
 import Helmet from 'react-helmet';
-import { Carousel, addComponent } from './carousel';
+import { Carousel, addComponent, removeComponent } from './carousel';
 
 import Container from './container';
 
-
 class Home extends React.Component {
-
   constructor(props) {
     super(props);
-    this.state = { key: 0 };
   }
 
-  handleClick = () => (
-    addComponent(
-      this.carousel,
-      <Name
-        name={`Butter ${this.state.key}`}
-        key={this.state.key}
-      />,
-      this.setState(({ key, ...rest }) => ({ ...rest, key: ++key }))
-    )
-  );
+  key = 0;
+
+  handleAdd = () =>
+    addComponent(this.carousel, <Name name={`Butter ${++this.key}`} key={this.key} />);
+
+  handleRemove = () => removeComponent(this.carousel);
 
   render() {
-
     const style = {
       display: 'flex',
       justifyContent: 'space-between',
       height: '500px'
     };
 
-    const elems = [
-      <Name name="Mom" key="Mom" />,
-      <Name name="Dad" key="Dad" />,
-      <Name name="Dog" key="Dog" />
-    ];
+    const elems = [<Name name={`Butter ${this.key}`} key={this.key} />];
 
     return (
       <Container>
         <Helmet title="Home" />
         <Carousel
           style={style}
-          ref={car => { this.carousel = car; }}
+          ref={car => {
+            this.carousel = car;
+          }}
         >
           {elems}
         </Carousel>
-        <button onClick={this.handleClick}>Add Component</button>
+        <button onClick={this.handleAdd}>Add Component</button>
+        <button onClick={this.handleRemove}>Remove Component</button>
       </Container>
     );
   }
