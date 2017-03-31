@@ -1,6 +1,7 @@
 import React, { PropTypes as T } from 'react';
 import Helmet from 'react-helmet';
-import { Carousel, addComponent, showComponent, removeComponent } from './carousel';
+import { Carousel } from './carousel';
+import { addComponent, removeComponent, showComponent } from '../utils';
 
 import Container from './container';
 
@@ -28,7 +29,12 @@ class Home extends React.Component {
       height: '500px'
     };
 
-    const elems = [<Name name={`Component #${this.key}`} key={this.key} />];
+    const elems = [
+      <Name name={`Component #${this.key}`} key={this.key} />,
+      <Name name={`Component #${++this.key}`} key={this.key} />,
+      <Name name={`Component #${++this.key}`} key={this.key} />,
+      <Name name={`Component #${++this.key}`} key={this.key} />
+    ];
 
     return (
       <Container>
@@ -41,7 +47,7 @@ class Home extends React.Component {
         </Carousel>
         <button onClick={this.handleAdd}>Add Component</button>
         <button onClick={this.handleRemove}>Remove Component</button>
-        <button onClick={() => showComponent(this.carousel, '3')}>Show 3</button>
+        <button onClick={() => showComponent(this.carousel, '0')}>Show 0</button>
       </Container>
     );
   }

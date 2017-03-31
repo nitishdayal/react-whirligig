@@ -1,6 +1,6 @@
+/* eslint-disable no-console */
 import React, { Component, PropTypes as T } from 'react';
 
-/* eslint-disable no-console, max-statements, no-nested-ternary */
 class CarouselNode {
   next;
   prev;
@@ -70,7 +70,7 @@ class Carousel extends Component {
       head: null,
       tail: null,
       curr: null,
-      nodes
+      nodes: [...nodes]
     };
   }
 
@@ -81,10 +81,10 @@ class Carousel extends Component {
    * @memberOf Carousel
    */
   componentWillMount() {
-    console.log('hello');
     const { head, tail, nodes } = this.state;
 
-    const newState = Carousel.appendNode([...nodes], head, tail), { head: curr } = newState;
+    const newState = Carousel.appendNode([...nodes], head, tail),
+      { head: curr } = newState;
 
     this.setState(prev => ({ ...prev, ...newState, curr }));
   }
@@ -102,12 +102,7 @@ class Carousel extends Component {
   shouldComponentUpdate(_, { curr: el, nodes: newNodes }) {
     const { curr: nEl, nodes } = this.state;
 
-    console.log(el !== nEl || nodes.length !== newNodes.length);
-
-    return (
-      el !== nEl ||
-      nodes.length !== newNodes.length
-    );
+    return (el !== nEl || nodes.length !== newNodes.length);
   }
 
   /*
@@ -146,76 +141,4 @@ class Carousel extends Component {
   }
 }
 
-/**
- * Append a component to the Carousel.
- *
- * @param {Carousel} carousel
- * Carousel instance
- *
- * @param {JSX.Element} cmp
- * New component to be appended to Carousel
- *
- * @param {function} cb
- * Optional callback function
- *
- * @return {void}
- */
-const addComponent = (carousel, cmp, cb = () => null) => {
-  const { nodes, head, tail } = carousel.state;
-  let { curr } = carousel.state;
-
-  curr =
-    curr === head ? head :
-      curr === tail ? tail :
-        curr;
-
-  const newHeadTail = Carousel.appendNode([cmp], head, tail);
-
-  carousel.setState(prev => ({ ...prev, ...newHeadTail, nodes: [...nodes, cmp], curr }), cb);
-};
-
-const removeComponent = (carousel, cb = () => null) => (
-  carousel.setState(({ tail, curr, ...rest }) => {
-    const { prev: newTail } = tail;
-
-    if (newTail) {
-      newTail.next = null;
-
-      if (curr === tail) { curr = newTail; }
-
-      tail = newTail;
-    }
-
-    return { ...rest, tail, curr };
-  }) && cb());
-
-const showComponent = (carousel, nodeKey) => {
-
-  const traverse = (node, dir, key) => {
-    while (node && node.el.key !== key) {
-      node = dir > 0 ? node.next : node.prev;
-    }
-    return node;
-  };
-
-  carousel.setState(({ curr, nodes, ...rest }) => {
-    let newCurr;
-    const [elExists] = nodes.filter(node => node.key === nodeKey);
-
-    if (elExists) {
-      newCurr = curr;
-
-      if (parseInt(nodeKey) > parseInt(curr.el.key)) {
-        newCurr = traverse(newCurr, 1, nodeKey);
-      } else if (parseInt(nodeKey) < parseInt(curr.el.key)) {
-        newCurr = traverse(newCurr, -1, nodeKey);
-      }
-    }
-
-    return { ...rest, nodes, curr: newCurr || curr };
-  });
-
-};
-
-
-export { Carousel, addComponent, showComponent, removeComponent };
+export { Carousel };
