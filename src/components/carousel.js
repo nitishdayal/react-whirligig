@@ -141,4 +141,4 @@ class Carousel extends Component {
   }
 }
 
-export { Carousel };
+export { Carousel, CarouselNode };
