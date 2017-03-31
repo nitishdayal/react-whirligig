@@ -49,7 +49,7 @@ Minimum Requirements:
 -   **External API - Show Component (DLL method):**
     -   [ ] Receive location (same parameter options as add component location)
         -   OR
-    -   [ ] Receive reference to element to be shown (???)
+    -   [x] ~Receive reference to element to be shown (???)~
 -   **External API - Get Component (DLL Method):**
     -   [ ] Same parameters as show component
 

@@ -2,27 +2,29 @@ React Whirligig -
 
 Minimum Requirements:
   External API - Main Carousel Component (React element):
-    ☐ Have left/right nav on sides of carousel component
+    ✔ Have left/right nav on sides of carousel component @done (3/31/2017, 6:45:39 AM)
       ☐ Receive optional on/off for left/right nav (boolean)
-    ☐ Have dot-style nav under carousel corresponding w/ amount of children components
+    ☐ Have dot-style nav under carousel corresponding w/ amount of children components @high 
       ☐ Receive optional on/off for dot-style nav (boolean)
-    ☐ Receive initial components as children (React elements)
-      ☐ Optional component prop name (string)
-    ☐ Receive optional style as props (React styling thing)
+    ✔ Receive initial components as children (React elements) @done (3/31/2017, 6:45:59 AM)
+    ✔ Require components to have a key @done (3/31/2017, 8:30:59 AM)
+    ✔ Receive optional style as props (React styling thing) @done (3/31/2017, 6:46:01 AM)
     ☐ Receive optional left/right button components as props (components)
     ☐ Receive optional scroll time (bool or ms)
+    ☐ Set default auto-scroll @high @critical
   External API - Add Component (DLL method):
-    ☐ Receive component (React element)
+    ✔ Receive component (React element) @done (3/31/2017, 6:46:07 AM)
     ☐ Receive optional location
       (number | 'first' | 'last' | 'middle' | 
                 'after first' | 'before middle' | 'after middle' | 'before last' |
               [ number,'before'|'after' ])
       Defaults to 'last' (new component is tail of DLL)
   External API - Remove Component (DLL method):
+    ✔ Default behavior - Remove current tail @done (3/31/2017, 6:46:33 AM)
     ☐ Receive location (same parameter options as add component location)
   External API - Show Component (DLL method):
     ☐ Receive location (same parameter options as add component location)
       OR
-      Receive reference to element to be shown (???)
+    ✔ Receive reference to element to be shown (???) @done (3/31/2017, 8:29:16 AM)
   External API - Get Component (DLL Method):
     ☐ Same parameters as show component

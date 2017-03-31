@@ -1,6 +1,6 @@
 import React, { PropTypes as T } from 'react';
 import Helmet from 'react-helmet';
-import { Carousel, addComponent, removeComponent } from './carousel';
+import { Carousel, addComponent, showComponent, removeComponent } from './carousel';
 
 import Container from './container';
 
@@ -12,7 +12,12 @@ class Home extends React.Component {
   key = 0;
 
   handleAdd = () =>
-    addComponent(this.carousel, <Name name={`Butter ${++this.key}`} key={this.key} />);
+    addComponent(
+      this.carousel,
+      <Name name={`Component #${++this.key}`}
+        key={this.key}
+      />
+    );
 
   handleRemove = () => removeComponent(this.carousel);
 
@@ -23,21 +28,20 @@ class Home extends React.Component {
       height: '500px'
     };
 
-    const elems = [<Name name={`Butter ${this.key}`} key={this.key} />];
+    const elems = [<Name name={`Component #${this.key}`} key={this.key} />];
 
     return (
       <Container>
         <Helmet title="Home" />
         <Carousel
+          ref={car => { this.carousel = car; }}
           style={style}
-          ref={car => {
-            this.carousel = car;
-          }}
         >
           {elems}
         </Carousel>
         <button onClick={this.handleAdd}>Add Component</button>
         <button onClick={this.handleRemove}>Remove Component</button>
+        <button onClick={() => showComponent(this.carousel, '3')}>Show 3</button>
       </Container>
     );
   }

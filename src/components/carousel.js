@@ -189,5 +189,33 @@ const removeComponent = (carousel, cb = () => null) => (
     return { ...rest, tail, curr };
   }) && cb());
 
+const showComponent = (carousel, nodeKey) => {
 
-export { Carousel, addComponent, removeComponent };
+  const traverse = (node, dir, key) => {
+    while (node && node.el.key !== key) {
+      node = dir > 0 ? node.next : node.prev;
+    }
+    return node;
+  };
+
+  carousel.setState(({ curr, nodes, ...rest }) => {
+    let newCurr;
+    const [elExists] = nodes.filter(node => node.key === nodeKey);
+
+    if (elExists) {
+      newCurr = curr;
+
+      if (parseInt(nodeKey) > parseInt(curr.el.key)) {
+        newCurr = traverse(newCurr, 1, nodeKey);
+      } else if (parseInt(nodeKey) < parseInt(curr.el.key)) {
+        newCurr = traverse(newCurr, -1, nodeKey);
+      }
+    }
+
+    return { ...rest, nodes, curr: newCurr || curr };
+  });
+
+};
+
+
+export { Carousel, addComponent, showComponent, removeComponent };
